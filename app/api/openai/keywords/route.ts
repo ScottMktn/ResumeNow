@@ -8,7 +8,7 @@ const openai = new OpenAI({
   },
 });
 
-export async function identifyKeyWords(
+async function identifyKeyWords(
   bullets: string[]
 ): Promise<{ keySkills: string[]; requirements: string[] }> {
   const prompt = `
