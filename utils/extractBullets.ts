@@ -1,9 +1,9 @@
 // utils/extractBullets.ts
 
-import cheerio from "cheerio";
+import { load } from "cheerio";
 
 export function extractBullets(html: string): string[] {
-  const $ = cheerio.load(html);
+  const $ = load(html);
   const bullets: string[] = [];
 
   // Select all <ul> elements and iterate through them

@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch the HTML content and extract bullet points
     const html = await fetchHtml(url);
+    console.log("Sucessfully fetched Html content");
     const bullets = extractBullets(html);
 
     console.log("Successfully extracted bullet points");
