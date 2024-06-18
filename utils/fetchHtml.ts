@@ -1,12 +1,17 @@
 // utils/fetchHtml.ts
 
-import puppeteer from "puppeteer";
+import playwright from "playwright";
 
 export async function fetchHtml(url: string): Promise<string> {
   try {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await playwright.chromium.launch({
+      headless: false, // setting this to true will not run the UI
+    });
+
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle2" });
+    await page.goto(url, {
+      waitUntil: "domcontentloaded",
+    });
 
     // Get the entire HTML content of the page
     const html = await page.content();
