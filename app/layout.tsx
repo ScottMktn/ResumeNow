@@ -20,9 +20,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="bg-violet-100 min-h-screen flex flex-col items-center">
           <div className="w-full max-w-2xl text-black py-16 px-4">
-            {/* <nav className="flex flex-row space-x-2 w-full">
-              <Link href="/">Home</Link>
-            </nav> */}
             {children}
           </div>
         </div>
