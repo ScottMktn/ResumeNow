@@ -14,7 +14,9 @@ export default function Home() {
         <span className="text-violet-700 font-bold">75% more likely</span> to
         pass the initial screening. Let AI personalize it for you.
       </p>
-      <div className="pt-16">{/* <ResumeForm /> */}</div>
+      <div className="pt-16">
+        <ResumeForm />
+      </div>
     </main>
   );
 }
