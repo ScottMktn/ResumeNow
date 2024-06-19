@@ -29,9 +29,7 @@ export async function fetchHtml(url: string): Promise<string> {
 
     const page = await browser.newPage();
 
-    await page.goto(url, {
-      waitUntil: "networkidle2",
-    });
+    await page.goto(url);
 
     // Get the entire HTML content of the page
     const html = await page.content();
