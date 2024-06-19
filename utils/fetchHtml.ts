@@ -1,16 +1,36 @@
-// utils/fetchHtml.ts
+// Importing Puppeteer core as default otherwise
+// it won't function correctly with "launch()"
+import puppeteerCore from "puppeteer-core";
+import puppeteer from "puppeteer";
+import chromium from "@sparticuz/chromium";
 
-import playwright from "playwright";
+export const dynamic = "force-dynamic";
+
+async function getBrowser() {
+  if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production") {
+    const executablePath = await chromium.executablePath();
+
+    const browser = await puppeteerCore.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath,
+      headless: chromium.headless,
+    });
+    return browser;
+  } else {
+    const browser = await puppeteer.launch();
+    return browser;
+  }
+}
 
 export async function fetchHtml(url: string): Promise<string> {
   try {
-    const browser = await playwright.chromium.launch({
-      headless: false, // setting this to true will not run the UI
-    });
+    const browser = await getBrowser();
 
     const page = await browser.newPage();
+
     await page.goto(url, {
-      waitUntil: "domcontentloaded",
+      waitUntil: "networkidle2",
     });
 
     // Get the entire HTML content of the page
