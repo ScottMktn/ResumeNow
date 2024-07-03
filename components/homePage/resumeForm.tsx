@@ -88,6 +88,9 @@ const ResumeForm = () => {
       console.log("Generated personalized resume", resumeJson);
     } catch (error) {
       console.error("Error generating personalized resume:", error);
+      setErrorMessage(
+        `Error: ${error ?? "Failed to generate resume. Please try again."}`
+      );
     }
   };
 
@@ -193,16 +196,6 @@ const ResumeForm = () => {
                         </li>
                       )
                     )}
-                  </ul>
-                </div>
-                <div className="flex flex-col space-y-2">
-                  <h4 className="text-sm font-semibold">Technologies</h4>
-                  <ul className="list-disc list-inside">
-                    {experience.Technologies.map((technology, index) => (
-                      <li key={index} className="text-sm">
-                        {technology}
-                      </li>
-                    ))}
                   </ul>
                 </div>
               </div>

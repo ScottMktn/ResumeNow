@@ -31,7 +31,13 @@ export async function POST(request: Request) {
         Resume Text:
         ${textResume}
 
+        Here are your instructions
+
         Rewrite the resume experience section to match the key skills and requirements provided. The goal is to personalize the resume for the specific job application.
+
+        Rewrite the bullets in the experience section for each job experience, but DO NOT add or remove any bullets. Make sure to keep the same number of bullets for each job experience.
+
+        Make sure to add key words from the job listing to the experience section of the resume to increase the chances of passing the initial screening.
 
  Please respond with a JSON-type object containing the identified key skills and requirements in this format: 
         {
@@ -41,14 +47,13 @@ export async function POST(request: Request) {
               "Title": "Job Title",
               "StartDate": "Start Date",
               "EndDate": "End Date",
-              "Responsibilities: ["Responsibility1", "Responsibility2", ...],
-              "Technologies": ["Technology1", "Technology2", ...]
+              "Responsibilities: ["Responsibility1", "Responsibility2", "Responsibility3", "Responsibility4"],
             }, 
             ...
           ]
         }
 
-        Do not put the leading or trailing backticks in your response.
+        Do not put the leading or trailing backticks in your response. 
         `;
 
   try {

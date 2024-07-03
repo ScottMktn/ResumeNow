@@ -1,6 +1,25 @@
+"use client";
+
 import ResumeForm from "@/components/homePage/resumeForm";
 
 export default function Home() {
+  const downloadResume = () => {
+    fetch("/api/doc", {
+      method: "POST",
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "resume.docx";
+        a.click();
+      })
+      .catch((error) => {
+        console.error("Error downloading resume:", error);
+      });
+  };
+
   return (
     <main id="hero" className="mt-16 flex flex-col space-y-4">
       <h1 className="text-2xl font-bold leading-relaxed">
@@ -14,6 +33,9 @@ export default function Home() {
         <span className="text-violet-700 font-bold">75% more likely</span> to
         pass the initial screening. Let AI personalize it for you.
       </p>
+      <div>
+        <button onClick={downloadResume}>Download Resume</button>
+      </div>
       <div className="pt-16">
         <ResumeForm />
       </div>
