@@ -4,23 +4,21 @@ import { FileUp, LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import ScrapeJob from "./scrapeJob";
 import pdfToText from "react-pdftotext";
-
-export interface ResumeType {
-  Experience: {
-    Company: "Company Name";
-    Title: "Job Title";
-    StartDate: "Start Date";
-    EndDate: "End Date";
-    Responsibilities: ["Responsibility1", "Responsibility2"];
-    Technologies: ["Technology1", "Technology2"];
-  }[];
-}
+import { ResumeData } from "@/utils/doc/buildDoc";
 
 const ResumeForm = () => {
   const [resume, setResume] = useState<File>();
   const [errorMessage, setErrorMessage] = useState<string>();
-  const [personalizedResume, setPersonalizedResume] = useState<ResumeType>();
-  const [status, setStatus] = useState<string>();
+  const [resumeBlob, setResumeBlob] = useState<Blob>();
+  const [status, setStatus] = useState<number>();
+
+  const statusMap: { [key: number]: string } = {
+    1: "Getting job details",
+    2: "Identifying skills and requirements",
+    3: "Parsing resume",
+    4: "Generating personalized resume",
+    5: "Preparing your download",
+  };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,7 +38,7 @@ const ResumeForm = () => {
 
     try {
       // First, scrape the job details from the provided URL
-      setStatus("Getting job details");
+      setStatus(1);
       const response = await fetch(
         `/api/scrape?url=${encodeURIComponent(jobUrl)}`
       );
@@ -48,7 +46,7 @@ const ResumeForm = () => {
       const bullets = data.bullets;
 
       // Next, identify the key skills and requirements from the job details
-      setStatus("Identifying skills and requirements");
+      setStatus(2);
       const keyWordsResponse = await fetch("/api/openai/keywords", {
         method: "POST",
         body: JSON.stringify({ bullets }),
@@ -63,11 +61,11 @@ const ResumeForm = () => {
       };
 
       // Next, parse the resume and convert it to text
-      setStatus("Parsing resume");
+      setStatus(3);
       const textResume = await pdfToText(resume);
 
       // Finally, generate a personalized resume based on the job details and the resume text
-      setStatus("Generating personalized resume");
+      setStatus(4);
       const resumeResponse = await fetch("/api/openai/resume", {
         method: "POST",
         body: JSON.stringify({ textResume, keyWords }),
@@ -76,14 +74,20 @@ const ResumeForm = () => {
         },
       });
 
-      const resumeJson = (await resumeResponse.json()) as ResumeType;
-      setStatus("Done");
-      setPersonalizedResume(resumeJson);
+      const resumeJson = (await resumeResponse.json()) as ResumeData;
+      setStatus(5);
 
-      // after 2 seconds, reset the status
-      setTimeout(() => {
-        setStatus(undefined);
-      }, 2000);
+      // build the resume and return a blob
+      const blob = await fetch("/api/doc", {
+        method: "POST",
+        body: JSON.stringify(resumeJson),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => response.blob());
+
+      setResumeBlob(blob);
+      setStatus(undefined);
 
       console.log("Generated personalized resume", resumeJson);
     } catch (error) {
@@ -101,13 +105,13 @@ const ResumeForm = () => {
         {status !== undefined && (
           <div id="status" className="flex items-center space-x-2">
             <LoaderCircle className="h-4 w-4 text-green-600 animate-spin" />
-            <span className="text-sm text-green-600">{status}</span>
+            <span className="text-sm text-green-600">{statusMap[status]}</span>
           </div>
         )}
       </div>
 
       <form
-        className="flex flex-col space-y-8 bg-white p-8 rounded-lg border border-violet-300"
+        className="flex flex-col space-y-8 bg-white p-8 rounded-lg border border-yellow-300"
         onSubmit={onSubmit}
       >
         <div className="flex flex-col space-y-2">
@@ -115,7 +119,7 @@ const ResumeForm = () => {
             Upload your resume
           </label>
           <label
-            className="p-8 w-full h-36 border border-dashed border-violet-300 rounded-lg flex items-center justify-center text-violet-900 hover:bg-violet-200 hover:cursor-pointer"
+            className="p-8 w-full h-36 border border-dashed border-yellow-300 rounded-lg flex items-center justify-center text-yellow-900 hover:bg-yellow-200 hover:cursor-pointer"
             htmlFor="resume"
           >
             <FileUp className="h-4 w-4 shrink-0" />
@@ -149,7 +153,7 @@ const ResumeForm = () => {
           <input
             id="job-url"
             type="url"
-            className="border border-dashed border-violet-300 rounded-lg p-2"
+            className="border border-dashed border-yellow-300 rounded-lg p-2"
           />
         </div>
         <div className="flex space-x-2 items-center w-full justify-end">
@@ -159,10 +163,24 @@ const ResumeForm = () => {
             </div>
           )}
 
-          <div className="flex w-full justify-end">
+          <div className="flex w-full justify-end space-x-4">
+            {resumeBlob && (
+              <button
+                onClick={() => {
+                  const url = window.URL.createObjectURL(resumeBlob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = "resume.docx";
+                  a.click();
+                }}
+                className="bg-yellow-900 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 font-bold flex items-center"
+              >
+                Download Resume {`(${(resumeBlob.size / 1024).toFixed(2)} KB)`}
+              </button>
+            )}
             <button
               type="submit"
-              className="bg-violet-900 text-white px-4 py-2 rounded-lg hover:bg-violet-700 font-bold flex items-center"
+              className="bg-yellow-900 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 font-bold flex items-center"
             >
               {status !== undefined && (
                 <LoaderCircle className="h-4 w-4 text-white animate-spin mr-2" />
@@ -172,37 +190,6 @@ const ResumeForm = () => {
           </div>
         </div>
       </form>
-      {personalizedResume && (
-        <div className="flex flex-col space-y-4 pt-16">
-          <h2 className="text-lg font-bold">Personalized Resume</h2>
-          <div className="flex flex-col space-y-4 bg-white p-8 rounded-lg border border-violet-300">
-            {personalizedResume.Experience.map((experience, index) => (
-              <div key={index} className="flex flex-col space-y-2">
-                <div className="flex justify-between">
-                  <h3 className="text-md font-semibold">
-                    {experience.Company} - {experience.Title}
-                  </h3>
-                  <p className="text-sm">
-                    {experience.StartDate} - {experience.EndDate}
-                  </p>
-                </div>
-                <div className="flex flex-col space-y-2">
-                  <h4 className="text-sm font-semibold">Responsibilities</h4>
-                  <ul className="list-disc list-inside">
-                    {experience.Responsibilities.map(
-                      (responsibility, index) => (
-                        <li key={index} className="text-sm">
-                          {responsibility}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

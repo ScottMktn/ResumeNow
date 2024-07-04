@@ -42,6 +42,31 @@ export interface ResumeData {
   Skills: Skills;
 }
 
+export interface FlattenedResumeData {
+  Experience: {
+    Company: string;
+    Title: string;
+    Location: string;
+    StartDate: string;
+    EndDate: string;
+    Responsibilities: string[];
+  }[];
+  Projects: {
+    Title: string;
+    Description: string;
+  }[];
+  Education: {
+    Institution: string;
+    Degree: string;
+    GPA: string;
+    Dates: string;
+  };
+  Skills: {
+    ProgramManagement: string;
+    TechnicalSkills: string;
+  };
+}
+
 const buildDoc = async (data: ResumeData): Promise<Buffer> => {
   // Add section title
   const addSectionTitle = (title: string) => {
@@ -56,7 +81,7 @@ const buildDoc = async (data: ResumeData): Promise<Buffer> => {
       ],
       spacing: {
         after: 72,
-        before: 108,
+        before: 144,
       },
     });
   };

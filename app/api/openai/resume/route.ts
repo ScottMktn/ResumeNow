@@ -1,7 +1,7 @@
 import { OpenAI } from "openai";
 import fs from "fs";
 import { ImageURL } from "openai/resources/beta/threads/messages.mjs";
-import { ResumeType } from "@/components/homePage/resumeForm";
+import { ResumeData } from "@/utils/doc/buildDoc";
 
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -40,18 +40,31 @@ export async function POST(request: Request) {
         Make sure to add key words from the job listing to the experience section of the resume to increase the chances of passing the initial screening.
 
  Please respond with a JSON-type object containing the identified key skills and requirements in this format: 
-        {
-          "Experience": [
-            {
-              "Company": "Company Name",
-              "Title": "Job Title",
-              "StartDate": "Start Date",
-              "EndDate": "End Date",
-              "Responsibilities: ["Responsibility1", "Responsibility2", "Responsibility3", "Responsibility4"],
-            }, 
-            ...
-          ]
-        }
+
+{
+  Experience: {
+    Company: string;
+    Title: string;
+    Location: string;
+    StartDate: string;
+    EndDate: string;
+    Responsibilities: string[];
+  }[];
+  Projects: {
+    Title: string;
+    Description: string;
+  }[];
+  Education: {
+    Institution: string;
+    Degree: string;
+    GPA: string;
+    Dates: string;
+  };
+  Skills: {
+    ProgramManagement: string;
+    TechnicalSkills: string;
+  };
+}
 
         Do not put the leading or trailing backticks in your response. 
         `;
@@ -66,7 +79,7 @@ export async function POST(request: Request) {
     const content = response.choices[0].message?.content || "{}";
     console.log("Received response from GPT-4");
     // Parse the JSON response from GPT-4
-    const resume = JSON.parse(content) as ResumeType;
+    const resume = JSON.parse(content) as ResumeData;
 
     console.log("Generated personalized resume with GPT-4", resume);
 

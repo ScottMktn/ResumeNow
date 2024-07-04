@@ -1,41 +1,20 @@
-"use client";
-
 import ResumeForm from "@/components/homePage/resumeForm";
 
 export default function Home() {
-  const downloadResume = () => {
-    fetch("/api/doc", {
-      method: "POST",
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "resume.docx";
-        a.click();
-      })
-      .catch((error) => {
-        console.error("Error downloading resume:", error);
-      });
-  };
-
   return (
-    <main id="hero" className="mt-16 flex flex-col space-y-4">
-      <h1 className="text-2xl font-bold leading-relaxed">
-        <span className="bg-violet-900 text-white px-2 py-1 -mx-2 -my-1 rounded-lg">
-          ResumeNow
+    <main id="hero" className="py-8 flex flex-col space-y-4 min-h-[90vh]">
+      <h1 className="text-2xl font-bold">
+        <span className="">
+          Apply to jobs <span className="underline text-amber-500">faster</span>{" "}
+          and with more{" "}
+          <span className="underline text-amber-500">success</span>
         </span>
-        <span className="ml-4">- Personalized Resume Generator</span>
       </h1>
       <p className="text-md">
-        Resumes that are personalized to a specific job application are{" "}
-        <span className="text-violet-700 font-bold">75% more likely</span> to
-        pass the initial screening. Let AI personalize it for you.
+        Resumes that are personalized to a specific job application are more
+        likely to pass the initial screening. Let AI personalize it for you.
       </p>
-      <div>
-        <button onClick={downloadResume}>Download Resume</button>
-      </div>
+
       <div className="pt-16">
         <ResumeForm />
       </div>
