@@ -110,16 +110,13 @@ const ResumeForm = () => {
         )}
       </div>
 
-      <form
-        className="flex flex-col space-y-8 bg-white p-8 rounded-lg border border-yellow-300"
-        onSubmit={onSubmit}
-      >
+      <form className="flex flex-col space-y-8" onSubmit={onSubmit}>
         <div className="flex flex-col space-y-2">
           <label className="text-sm font-semibold" htmlFor="resume">
             Upload your resume
           </label>
           <label
-            className="p-8 w-full h-36 border border-dashed border-yellow-300 rounded-lg flex items-center justify-center text-yellow-900 hover:bg-yellow-200 hover:cursor-pointer"
+            className="p-8 w-full h-36 border border-dashed bg-white border-yellow-300 rounded-lg flex items-center justify-center text-yellow-900 hover:bg-yellow-100 hover:cursor-pointer"
             htmlFor="resume"
           >
             <FileUp className="h-4 w-4 shrink-0" />
@@ -153,7 +150,7 @@ const ResumeForm = () => {
           <input
             id="job-url"
             type="url"
-            className="border border-dashed border-yellow-300 rounded-lg p-2"
+            className="border border-dashed border-yellow-300 rounded-lg p-2 text-yellow-900"
           />
         </div>
         <div className="flex space-x-2 items-center w-full justify-end">
