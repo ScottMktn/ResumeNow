@@ -11,6 +11,7 @@ const ResumeForm = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [resumeBlob, setResumeBlob] = useState<Blob>();
   const [status, setStatus] = useState<number>();
+  const [company, setCompany] = useState<string>();
 
   const statusMap: { [key: number]: string } = {
     1: "Getting job details",
@@ -87,6 +88,9 @@ const ResumeForm = () => {
       }).then((response) => response.blob());
 
       setResumeBlob(blob);
+      const url = new URL(jobUrl);
+      const company = url.hostname.replace("www.", "").split(".")[0];
+      setCompany(company);
       setStatus(undefined);
 
       console.log("Generated personalized resume", resumeJson);
@@ -173,12 +177,16 @@ const ResumeForm = () => {
                 const url = window.URL.createObjectURL(resumeBlob);
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = "resume.docx";
+                a.download = `${resume!.name.replace(
+                  ".pdf",
+                  ""
+                )} - ${company}.docx`;
                 a.click();
               }}
               className="p-8 w-full h-36 border border-dashed border-yellow-500 rounded-lg flex items-center justify-center text-yellow-900 hover:bg-yellow-100 hover:cursor-pointer"
             >
-              resume.docx {`(${(resumeBlob.size / 1024).toFixed(2)} KB)`}
+              {`${resume!.name.replace(".pdf", "") + ` - ${company}.docx`}`}{" "}
+              {`(${(resumeBlob.size / 1024).toFixed(2)} KB)`}
             </button>
           </div>
         )}
