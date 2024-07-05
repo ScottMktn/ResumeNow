@@ -11,6 +11,9 @@ const openai = new OpenAI({
   },
 });
 
+export const maxDuration = 60; // This function can run for a maximum of 5 seconds
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   const body = await request.json();
   const textResume = body.textResume as string;
