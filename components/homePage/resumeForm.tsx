@@ -140,29 +140,28 @@ const ResumeForm = () => {
           <input
             id="job-url"
             type="url"
-            className="border border-dashed border-yellow-500 bg-transparent rounded-lg p-2 text-yellow-900"
+            className="border border-dashed border-yellow-500 bg-transparent rounded-lg p-2 text-yellow-900 text-sm"
           />
         </div>
-        <div className="flex space-x-2 items-center w-full justify-end">
-          {errorMessage && (
-            <div className="flex justify-end">
-              <p className="text-sm text-red-500">{errorMessage}</p>
-            </div>
-          )}
-
-          <div className="flex w-full justify-center space-x-4">
-            <button
-              disabled={status !== undefined}
-              type="submit"
-              className="bg-yellow-900 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 font-semibold flex items-center text-sm"
-            >
-              {status !== undefined && (
-                <LoaderCircle className="h-4 w-4 text-white animate-spin mr-2" />
-              )}
-              {status !== undefined ? statusMap[status] : "Generate Resume"}
-            </button>
+        {errorMessage && (
+          <div className="flex justify-center">
+            <p className="text-sm text-red-500">{errorMessage}</p>
           </div>
+        )}
+
+        <div className="flex w-full justify-center space-x-4">
+          <button
+            disabled={status !== undefined}
+            type="submit"
+            className="bg-yellow-900 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 font-semibold flex items-center text-sm"
+          >
+            {status !== undefined && (
+              <LoaderCircle className="h-4 w-4 text-white animate-spin mr-2" />
+            )}
+            {status !== undefined ? statusMap[status] : "Generate Resume"}
+          </button>
         </div>
+
         {resumeBlob && (
           <div className="flex flex-col space-y-2">
             <label className="text-sm font-semibold text-green-500">
