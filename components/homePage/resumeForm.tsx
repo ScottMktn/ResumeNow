@@ -100,23 +100,13 @@ const ResumeForm = () => {
 
   return (
     <div className="flex flex-col space-y-4 relative">
-      <div className="flex justify-between w-full">
-        <h2 className="text-lg font-bold">Try for Free</h2>
-        {status !== undefined && (
-          <div id="status" className="flex items-center space-x-2">
-            <LoaderCircle className="h-4 w-4 text-green-600 animate-spin" />
-            <span className="text-sm text-green-600">{statusMap[status]}</span>
-          </div>
-        )}
-      </div>
-
       <form className="flex flex-col space-y-8" onSubmit={onSubmit}>
         <div className="flex flex-col space-y-2">
           <label className="text-sm font-semibold" htmlFor="resume">
             Upload your resume
           </label>
           <label
-            className="p-8 w-full h-36 border border-dashed bg-white border-yellow-300 rounded-lg flex items-center justify-center text-yellow-900 hover:bg-yellow-100 hover:cursor-pointer"
+            className="p-8 w-full h-36 border border-dashed border-yellow-500 rounded-lg flex items-center justify-center text-yellow-900 hover:bg-yellow-100 hover:cursor-pointer"
             htmlFor="resume"
           >
             <FileUp className="h-4 w-4 shrink-0" />
@@ -150,7 +140,7 @@ const ResumeForm = () => {
           <input
             id="job-url"
             type="url"
-            className="border border-dashed border-yellow-300 rounded-lg p-2 text-yellow-900"
+            className="border border-dashed border-yellow-500 bg-transparent rounded-lg p-2 text-yellow-900"
           />
         </div>
         <div className="flex space-x-2 items-center w-full justify-end">
@@ -160,32 +150,39 @@ const ResumeForm = () => {
             </div>
           )}
 
-          <div className="flex w-full justify-end space-x-4">
-            {resumeBlob && (
-              <button
-                onClick={() => {
-                  const url = window.URL.createObjectURL(resumeBlob);
-                  const a = document.createElement("a");
-                  a.href = url;
-                  a.download = "resume.docx";
-                  a.click();
-                }}
-                className="bg-yellow-900 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 font-bold flex items-center"
-              >
-                Download Resume {`(${(resumeBlob.size / 1024).toFixed(2)} KB)`}
-              </button>
-            )}
+          <div className="flex w-full justify-center space-x-4">
             <button
+              disabled={status !== undefined}
               type="submit"
-              className="bg-yellow-900 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 font-bold flex items-center"
+              className="bg-yellow-900 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 font-semibold flex items-center text-sm"
             >
               {status !== undefined && (
                 <LoaderCircle className="h-4 w-4 text-white animate-spin mr-2" />
               )}
-              Generate Resume
+              {status !== undefined ? statusMap[status] : "Generate Resume"}
             </button>
           </div>
         </div>
+        {resumeBlob && (
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-semibold text-green-500">
+              Success! Click below to download your personalized resume
+            </label>
+            <button
+              type="button"
+              onClick={() => {
+                const url = window.URL.createObjectURL(resumeBlob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "resume.docx";
+                a.click();
+              }}
+              className="p-8 w-full h-36 border border-dashed border-yellow-500 rounded-lg flex items-center justify-center text-yellow-900 hover:bg-yellow-100 hover:cursor-pointer"
+            >
+              resume.docx {`(${(resumeBlob.size / 1024).toFixed(2)} KB)`}
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );

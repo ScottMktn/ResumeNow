@@ -1,4 +1,5 @@
 import ResumeForm from "@/components/homePage/resumeForm";
+import { FileText } from "lucide-react";
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
           <span className="underline text-amber-500">success</span>
         </span>
       </h1>
-      <p className="text-md">
+      <p className="text-sm">
         Resumes that are personalized to a specific job application are more
         likely to pass the initial screening. Let AI personalize it for you.
       </p>

@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     console.log("Sucessfully fetched Html content");
     const bullets = extractBullets(html);
 
-    console.log("Successfully extracted bullet points");
+    console.log("Successfully extracted bullet points", bullets);
     // Send the bullet points as a JSON response
     return NextResponse.json({ bullets });
   } catch (error) {

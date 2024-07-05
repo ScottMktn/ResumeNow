@@ -6,9 +6,6 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const resumeData = body as ResumeData;
 
-  console.log("Reuqest body:", body);
-  console.log("Resume data:", resumeData);
-
   const buffer = await buildDoc(resumeData);
 
   // Return the resume as a downloadable file

@@ -35,7 +35,16 @@ interface Skills {
   TechnicalSkills: string;
 }
 
+interface PersonalInfo {
+  Name: string;
+  Title: string;
+  Location: string;
+  Email: string;
+  Phone: string;
+}
+
 export interface ResumeData {
+  PersonalInfo: PersonalInfo;
   Experience: Experience[];
   Projects: Project[];
   Education: Education;
@@ -43,6 +52,13 @@ export interface ResumeData {
 }
 
 export interface FlattenedResumeData {
+  PersonalInfo: {
+    Name: string;
+    Title: string;
+    Location: string;
+    Email: string;
+    Phone: string;
+  };
   Experience: {
     Company: string;
     Title: string;
@@ -183,7 +199,7 @@ const buildDoc = async (data: ResumeData): Promise<Buffer> => {
           new Paragraph({
             children: [
               ThemedText({
-                title: "Scott Nguyen",
+                title: data.PersonalInfo.Name,
                 bold: true,
                 variant: "heading",
               }),
@@ -196,7 +212,7 @@ const buildDoc = async (data: ResumeData): Promise<Buffer> => {
           new Paragraph({
             children: [
               ThemedText({
-                title: "Senior Software Engineer",
+                title: data.PersonalInfo.Title,
                 bold: true,
                 variant: "heading",
               }),
@@ -209,8 +225,7 @@ const buildDoc = async (data: ResumeData): Promise<Buffer> => {
           new Paragraph({
             children: [
               ThemedText({
-                title:
-                  "San Francisco, CA 94102 • scottmktn@gmail.com • +1 (617) 417-4011",
+                title: `${data.PersonalInfo.Location} • ${data.PersonalInfo.Email} • ${data.PersonalInfo.Phone}`,
                 variant: "subheading",
               }),
             ],

@@ -42,6 +42,13 @@ export async function POST(request: Request) {
  Please respond with a JSON-type object containing the identified key skills and requirements in this format: 
 
 {
+  PersonalInfo: {
+    Name: string;
+    Title: string;
+    Location: string;
+    Email: string;
+    Phone: string;
+  };
   Experience: {
     Company: string;
     Title: string;
@@ -66,6 +73,7 @@ export async function POST(request: Request) {
   };
 }
 
+
         Do not put the leading or trailing backticks in your response. 
         `;
 
@@ -77,11 +85,9 @@ export async function POST(request: Request) {
     });
 
     const content = response.choices[0].message?.content || "{}";
-    console.log("Received response from GPT-4");
+
     // Parse the JSON response from GPT-4
     const resume = JSON.parse(content) as ResumeData;
-
-    console.log("Generated personalized resume with GPT-4", resume);
 
     return new Response(JSON.stringify(resume), {
       headers: { "Content-Type": "application/json" },
