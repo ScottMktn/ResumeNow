@@ -8,6 +8,9 @@ const openai = new OpenAI({
   },
 });
 
+export const maxDuration = 60; // This function can run for a maximum of 5 seconds
+export const dynamic = "force-dynamic";
+
 async function identifyKeyWords(
   bullets: string[]
 ): Promise<{ keySkills: string[]; requirements: string[] }> {
@@ -28,7 +31,7 @@ async function identifyKeyWords(
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o", // Use 'gpt-4' or 'gpt-4-turbo' if available
+      model: "gpt-4-turbo",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 2000, // Adjust token limit as necessary
     });

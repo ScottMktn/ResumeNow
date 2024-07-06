@@ -4,6 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { fetchHtml } from "../../../utils/fetchHtml";
 import { extractBullets } from "../../../utils/extractBullets";
 
+export const maxDuration = 60; // This function can run for a maximum of 5 seconds
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   const url = request.nextUrl.searchParams.get("url");
   if (!url) {
