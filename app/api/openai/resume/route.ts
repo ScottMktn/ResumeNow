@@ -42,6 +42,8 @@ export async function POST(request: Request) {
 
         Make sure to add key words from the job listing to the experience section of the resume to increase the chances of passing the initial screening.
 
+        The Extracurricular section is also sometimes labelled "Projects", "Volunteer Experience", or "Leadership Experience". Rewrite the bullets in the Extracurricular section to match the key skills and requirements provided.
+
  Please respond with a JSON-type object containing the identified key skills and requirements in this format: 
 
 {
@@ -60,9 +62,9 @@ export async function POST(request: Request) {
     EndDate: string;
     Responsibilities: string[];
   }[];
-  Projects: {
+  Extracurricular: {
     Title: string;
-    Description: string;
+    Description: string[];
   }[];
   Education: {
     Institution: string;
@@ -71,13 +73,11 @@ export async function POST(request: Request) {
     Dates: string;
   };
   Skills: {
-    ProgramManagement: string;
     TechnicalSkills: string;
+    Interests: string;
   };
 }
 
-
-        Do not put the leading or trailing backticks in your response. 
         `;
 
   try {
@@ -85,11 +85,14 @@ export async function POST(request: Request) {
       model: "gpt-4o", // Use 'gpt-4' or 'gpt-4-turbo' if available
       messages: [{ role: "user", content: prompt }],
       max_tokens: 2000, // Adjust token limit as necessary
+      response_format: {
+        type: "json_object",
+      },
     });
 
     const content = response.choices[0].message?.content || "{}";
 
-    // Parse the JSON response from GPT-4
+    // // Parse the JSON response from GPT-4
     const resume = JSON.parse(content) as ResumeData;
 
     return new Response(JSON.stringify(resume), {

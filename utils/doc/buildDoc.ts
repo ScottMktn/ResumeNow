@@ -18,9 +18,9 @@ interface Experience {
   Responsibilities: string[];
 }
 
-interface Project {
+interface Extracurricular {
   Title: string;
-  Description: string;
+  Description: string[];
 }
 
 interface Education {
@@ -31,8 +31,8 @@ interface Education {
 }
 
 interface Skills {
-  ProgramManagement: string;
   TechnicalSkills: string;
+  Interests: string;
 }
 
 interface PersonalInfo {
@@ -46,7 +46,7 @@ interface PersonalInfo {
 export interface ResumeData {
   PersonalInfo: PersonalInfo;
   Experience: Experience[];
-  Projects: Project[];
+  Extracurricular: Extracurricular[];
   Education: Education;
   Skills: Skills;
 }
@@ -67,9 +67,9 @@ export interface FlattenedResumeData {
     EndDate: string;
     Responsibilities: string[];
   }[];
-  Projects: {
+  Extracurricular: {
     Title: string;
-    Description: string;
+    Description: string[];
   }[];
   Education: {
     Institution: string;
@@ -78,8 +78,8 @@ export interface FlattenedResumeData {
     Dates: string;
   };
   Skills: {
-    ProgramManagement: string;
     TechnicalSkills: string;
+    Interests: string;
   };
 }
 
@@ -154,7 +154,7 @@ const buildDoc = async (data: ResumeData): Promise<Buffer> => {
           after: 72,
         },
       }),
-      ...experience.Responsibilities.map((responsibility) => {
+      ...experience.Responsibilities?.map((responsibility) => {
         return new Paragraph({
           children: [
             ThemedText({
@@ -237,12 +237,12 @@ const buildDoc = async (data: ResumeData): Promise<Buffer> => {
 
           addSectionTitle("PROFESSIONAL EXPERIENCE"),
           ...data.Experience.flatMap(addExperience),
-          addSectionTitle("PROJECTS"),
-          ...data.Projects.map((project) => [
+          addSectionTitle("EXTRACURRICULARS"),
+          ...data.Extracurricular?.map((extracurricular) => [
             new Paragraph({
               children: [
                 ThemedText({
-                  title: project.Title,
+                  title: extracurricular.Title,
                   bold: true,
                   variant: "subheading",
                 }),
@@ -251,25 +251,26 @@ const buildDoc = async (data: ResumeData): Promise<Buffer> => {
                 after: 36,
               },
             }),
-
-            new Paragraph({
-              children: [
-                ThemedText({
-                  title: project.Description,
-                  variant: "body",
-                }),
-              ],
-              indent: {
-                left: 256,
-                hanging: 256,
-                start: 256,
-              },
-              bullet: {
-                level: 0,
-              },
-              spacing: {
-                after: 72,
-              },
+            ...extracurricular.Description?.map((description) => {
+              return new Paragraph({
+                children: [
+                  ThemedText({
+                    title: description,
+                    variant: "body",
+                  }),
+                ],
+                indent: {
+                  left: 256,
+                  hanging: 256,
+                  start: 256,
+                },
+                bullet: {
+                  level: 0,
+                },
+                spacing: {
+                  after: 72,
+                },
+              });
             }),
           ]).flat(),
           addSectionTitle("EDUCATION"),
@@ -325,7 +326,7 @@ const buildDoc = async (data: ResumeData): Promise<Buffer> => {
           new Paragraph({
             children: [
               ThemedText({
-                title: `Program Management: ${data.Skills.ProgramManagement}`,
+                title: `Technical Skills: ${data.Skills.TechnicalSkills}`,
                 variant: "subheading",
               }),
             ],
@@ -333,7 +334,7 @@ const buildDoc = async (data: ResumeData): Promise<Buffer> => {
           new Paragraph({
             children: [
               ThemedText({
-                title: `Technical Skills: ${data.Skills.TechnicalSkills}`,
+                title: `Interests: ${data.Skills.Interests}`,
                 variant: "subheading",
               }),
             ],
