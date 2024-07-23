@@ -138,8 +138,14 @@ const ResumeForm = () => {
           />
         </div>
         <div className="flex flex-col space-y-2">
-          <label className="text-sm font-semibold" htmlFor="job-url">
+          <label
+            className="text-sm font-semibold flex items-center"
+            htmlFor="job-url"
+          >
             Job Application URL
+            <span className="text-xs text-gray-500 ml-2">
+              (works best with dedicated job pages)
+            </span>
           </label>
           <input
             id="job-url"
