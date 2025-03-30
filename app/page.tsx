@@ -1,6 +1,3 @@
-import ResumeForm from "@/components/homePage/resumeForm";
-import { FileText } from "lucide-react";
-
 export default function Home() {
   return (
     <main id="hero" className="py-8 flex flex-col space-y-4 min-h-[90vh]">
@@ -15,10 +12,6 @@ export default function Home() {
         Resumes that are personalized to a specific job application are more
         likely to pass the initial screening. Let AI personalize it for you.
       </p>
-
-      <div className="pt-16">
-        <ResumeForm />
-      </div>
     </main>
   );
 }
