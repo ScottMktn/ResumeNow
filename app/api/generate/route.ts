@@ -22,6 +22,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPEN_API_KEY,
 });
 
+export const maxDuration = 60; //set maximum duration
+
 // Helper function to upload a file to S3
 async function uploadToS3(key: string, data: Buffer, contentType: string) {
   const s3Client = new S3Client({
