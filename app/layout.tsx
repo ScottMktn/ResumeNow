@@ -15,7 +15,26 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ResumeNow",
-  description: "AI-powered modular resume generator for job applications",
+  description: "Your resume, optimized for every application",
+  openGraph: {
+    title: "ResumeNow",
+    description: "Your resume, optimized for every application",
+    images: [
+      {
+        url: "/rn-banner.png",
+        width: 1200,
+        height: 630,
+        alt: "ResumeNow - AI-powered resume generator",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ResumeNow",
+    description: "Your resume, optimized for every application",
+    images: ["/rn-banner.png"],
+  },
 };
 
 export default async function RootLayout({

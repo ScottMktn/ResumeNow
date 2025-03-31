@@ -8,7 +8,7 @@ export default function Home() {
       {/* Hero Section */}
       <div className="flex flex-col items-center text-center">
         <div className="space-y-6 max-w-2xl">
-          <h1 className="text-5xl font-bold tracking-tight leading-tight">
+          <h1 className="text-5xl font-bold tracking-tight leading-tight py-96">
             Your resume, optimized for{" "}
             <span className="text-amber-500">every application</span>
           </h1>
