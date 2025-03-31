@@ -17,6 +17,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "ResumeNow",
   description: "Your resume, optimized for every application",
+  metadataBase: new URL("https://resumenow.cc"),
   openGraph: {
     title: "ResumeNow",
     description: "Your resume, optimized for every application",
@@ -29,12 +30,14 @@ export const metadata: Metadata = {
       },
     ],
     type: "website",
+    siteName: "ResumeNow",
   },
   twitter: {
     card: "summary_large_image",
     title: "ResumeNow",
     description: "Your resume, optimized for every application",
     images: ["/rn-banner.png"],
+    creator: "@yourusername",
   },
 };
 

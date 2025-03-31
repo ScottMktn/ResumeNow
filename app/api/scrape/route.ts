@@ -10,6 +10,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPEN_API_KEY,
 });
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest) {
   try {
     // Get authenticated user

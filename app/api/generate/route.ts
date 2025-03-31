@@ -22,6 +22,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPEN_API_KEY,
 });
 
+export const dynamic = "force-dynamic";
+
 export const maxDuration = 60; //set maximum duration
 
 // Helper function to upload a file to S3

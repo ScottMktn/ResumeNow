@@ -6,6 +6,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { saveUserResume } from "@/utils/db/dynamoDb";
 
 export const maxDuration = 60; // Set maximum duration to 60 seconds
+export const dynamic = "force-dynamic";
 
 // Helper function to upload a file to S3
 async function uploadToS3(key: string, data: Buffer, contentType: string) {
