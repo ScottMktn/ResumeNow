@@ -11,6 +11,7 @@ import defaultFetcher from "@/utils/defaultFetcher";
 import { Job, Resume } from "@/utils/db/dynamoDb";
 import { Separator } from "../ui/separator";
 import { Download, FileDown } from "lucide-react";
+import CheckMark from "./checkMark";
 
 // Define fetcher function for SWR
 const fetcher = async (
@@ -43,7 +44,9 @@ export default function GenerateResume({ userId }: { userId: string }) {
   const [currentGenerationId, setCurrentGenerationId] = useState<string | null>(
     null
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingState, setLoadingState] = useState<
+    "idle" | "scraping" | "generating"
+  >("idle");
 
   const { trigger, data, error, isMutating } = useSWRMutation(
     "/api/scrape",
@@ -56,23 +59,26 @@ export default function GenerateResume({ userId }: { userId: string }) {
       return;
     }
 
-    setIsLoading(true);
+    setLoadingState("scraping");
+    // 1. clear the existing resume and statuses
+    setFilename(null);
+    setS3Key(null);
+    setCurrentGenerationId(null);
 
-    // 1. generate a generation id
+    // 2. generate a generation id
     const generationId = uuidv4();
     setCurrentGenerationId(generationId);
-    // 2. scrape the job details
+    // 3. scrape the job details
     try {
       await trigger({ urls: [jobUrl], generationId });
-
-      console.log("Scraped job data:", data);
     } catch (err) {
       console.error("Error generating resume:", err);
     }
 
-    // 3. generate the resume
+    // 4. generate the resume
     try {
       // fetch the latest resume details
+
       const latestResumeDetails = await fetch(`/api/get-latest-resume-details`);
       const latestResumeDetailsData = await latestResumeDetails.json();
 
@@ -84,6 +90,7 @@ export default function GenerateResume({ userId }: { userId: string }) {
       const job = jobDetailsData.job as Job;
 
       // generate the resume
+      setLoadingState("generating");
       const generateResume = await fetch("/api/generate", {
         method: "POST",
         body: JSON.stringify({
@@ -106,7 +113,7 @@ export default function GenerateResume({ userId }: { userId: string }) {
     } catch (error) {
       console.error("Error generating resume:", error);
     } finally {
-      setIsLoading(false);
+      setLoadingState("idle");
     }
   };
 
@@ -137,7 +144,10 @@ export default function GenerateResume({ userId }: { userId: string }) {
   return (
     <div className="flex flex-col space-y-4">
       <div className="flex flex-col space-y-2">
-        <p className="text-sm font-medium">Paste the job link here</p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-medium">Paste the job link here</p>
+          {jobUrl && <CheckMark />}
+        </div>
         <Input
           className="yellow"
           value={jobUrl}
@@ -152,35 +162,40 @@ export default function GenerateResume({ userId }: { userId: string }) {
         </p>
       )}
 
-      <div className="flex justify-center w-full items-center gap-4">
+      <div className="flex justify-center w-full items-center gap-4 py-8">
         <Button
           onClick={handleGenerateResume}
-          disabled={isLoading || jobUrl.trim() === ""}
+          disabled={loadingState !== "idle" || jobUrl.trim() === ""}
         >
-          {isLoading && <DefaultLoading />}
-          Generate Resume
+          {(loadingState === "scraping" || loadingState === "generating") && (
+            <DefaultLoading />
+          )}
+          {loadingState === "idle" && "Generate Resume"}
+          {loadingState === "scraping" && "Scraping job details..."}
+          {loadingState === "generating" && "Generating resume..."}
         </Button>
       </div>
       {s3Key && (
         <>
-          <div className="my-4">
+          <div className="my-8">
             <Separator />
           </div>
-          <p className="text-sm font-medium">Generated Resume</p>
-          <div className="relative p-8 w-full border border-dashed border-yellow-500 rounded-lg flex items-center justify-center h-36">
-            <span className="text-sm text-yellow-900 flex items-center gap-2">
-              <FileDown className="h-4 w-4 shrink-0 text-yellow-900" />
+          <p className="text-sm font-medium pt-4 text-green-500">
+            Successfully generated resume
+          </p>
+          <div
+            className="relative p-8 w-full border border-green-500 rounded-lg flex items-center justify-center h-36 cursor-pointer bg-green-100 hover:bg-green-200 transition-colors"
+            onClick={handleDownloadResume}
+          >
+            <span className="text-sm text-green-900 flex items-center gap-2">
+              <FileDown className="h-4 w-4 shrink-0 text-green-900" />
               <span className="text-sm">{filename}</span>
             </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2"
-              onClick={handleDownloadResume}
-            >
-              <Download className="h-4 w-4 shrink-0 text-yellow-900" />
-            </Button>
+            <div className="absolute top-2 right-2">
+              <Download className="h-4 w-4 shrink-0 text-green-900" />
+            </div>
           </div>
+          <div className="pb-16" />
         </>
       )}
     </div>

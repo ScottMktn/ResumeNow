@@ -38,8 +38,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("Results:", results);
-
     const prompt = `
     *Your Role*: You are a job page synthesizer. You are given the contents of a job listing online 
 
@@ -76,8 +74,6 @@ export async function POST(request: NextRequest) {
     });
 
     const event = response.choices[0].message.parsed;
-
-    console.log("Event:", event);
 
     // Save job data to DynamoDB with the generation ID if provided
     const jobData = await saveJobData(generationId, {

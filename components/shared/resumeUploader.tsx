@@ -77,12 +77,12 @@ export default function ResumeUploader({ userId }: { userId: string }) {
       </div>
 
       {isLoading ? (
-        <div className="p-8 w-full h-36 border border-dashed border-yellow-500 rounded-lg flex items-center justify-center">
+        <div className="p-8 w-full h-36 border bg-yellow-100 hover:bg-yellow-200 transition-colors border-yellow-500 rounded-lg flex items-center justify-center">
           <DefaultLoading />
         </div>
       ) : (
         <label
-          className={`relative p-8 w-full h-36 border border-dashed border-yellow-500 rounded-lg flex items-center justify-center text-yellow-900 hover:bg-yellow-100 hover:cursor-pointer ${
+          className={`relative p-8 w-full h-36 border bg-yellow-100 hover:bg-yellow-200 transition-colors border-yellow-500 rounded-lg flex items-center justify-center text-yellow-900 hover:cursor-pointer ${
             isUploading ? "opacity-50 pointer-events-none" : ""
           }`}
           htmlFor="resume"

@@ -1,11 +1,6 @@
 import GenerateResume from "@/components/shared/generateResume";
-import JobSearch from "@/components/shared/jobSearch";
 import ResumeUploader from "@/components/shared/resumeUploader";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { auth } from "@clerk/nextjs/server";
-import { FileUp } from "lucide-react";
-import { redirect } from "next/navigation";
 
 // make sure the user is authenticated
 export default async function Home() {

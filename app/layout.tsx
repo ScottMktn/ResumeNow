@@ -10,6 +10,7 @@ import {
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -54,27 +55,28 @@ export default async function RootLayout({
                     Resume<span className="text-amber-500">Now</span>
                   </p>
                 </Link>
-                <div className="flex items-center gap-8">
-                  <SignedOut>
-                    <SignInButton />
-                    <SignUpButton />
-                  </SignedOut>
-                  <SignedIn>
-                    <Link
-                      href="/home"
-                      className="text-sm text-gray-600 hover:text-black font-medium"
-                    >
-                      Home
-                    </Link>
-                    <Link
-                      href="/history"
-                      className="text-sm text-gray-600 hover:text-black font-medium"
-                    >
-                      History
-                    </Link>
+
+                <SignedOut>
+                  <div className="flex items-center gap-2">
+                    <SignInButton>
+                      <Button variant="ghost">Login</Button>
+                    </SignInButton>
+                    <SignUpButton>
+                      <Button variant="default">Sign Up</Button>
+                    </SignUpButton>
+                  </div>
+                </SignedOut>
+                <SignedIn>
+                  <div className="flex items-center">
+                    <Button asChild variant="link">
+                      <Link href="/home">Home</Link>
+                    </Button>
+                    <Button asChild variant="link" className="mr-4">
+                      <Link href="/history">History</Link>
+                    </Button>
                     <UserButton />
-                  </SignedIn>
-                </div>
+                  </div>
+                </SignedIn>
               </header>
             </nav>
             <div className="w-full text-black">
@@ -87,7 +89,7 @@ export default async function RootLayout({
             <footer className="text-black w-full border-t border-dashed border-yellow-300 text-sm text-bold">
               <div className="max-w-3xl w-full flex justify-between items-center mx-auto">
                 <div className="w-full px-8 py-4 border-l border-r border-dashed border-yellow-300 text-bold">
-                  Made with ❤️ in San Francisco
+                  © ResumeNow 2025
                 </div>
               </div>
             </footer>
