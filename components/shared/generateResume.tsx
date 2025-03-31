@@ -191,9 +191,16 @@ export default function GenerateResume({ userId }: { userId: string }) {
               <FileDown className="h-4 w-4 shrink-0 text-green-900" />
               <span className="text-sm">{filename}</span>
             </span>
-            <div className="absolute top-2 right-2">
-              <Download className="h-4 w-4 shrink-0 text-green-900" />
-            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2"
+              onClick={(e) => {
+                // do nothing
+              }}
+            >
+              <Download className="h-4 w-4 shrink-0" />
+            </Button>
           </div>
           <div className="pb-16" />
         </>

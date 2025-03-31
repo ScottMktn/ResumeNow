@@ -25,13 +25,10 @@ export default function ResumeUploader({ userId }: { userId: string }) {
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    const validTypes = [
-      "application/pdf",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
+    const validTypes = ["application/pdf"];
 
     if (!validTypes.includes(file.type)) {
-      setErrorMessage("Please upload a PDF or DOCX file");
+      setErrorMessage("Please upload a PDF file");
       return;
     }
 
@@ -72,7 +69,9 @@ export default function ResumeUploader({ userId }: { userId: string }) {
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex items-center gap-2">
-        <p className="text-sm font-medium">Upload your resume</p>
+        <p className="text-sm font-medium">
+          Upload your resume <span className="text-gray-500">(pdf only)</span>
+        </p>
         {existingResume && <CheckMark />}
       </div>
 
@@ -116,7 +115,7 @@ export default function ResumeUploader({ userId }: { userId: string }) {
       <input
         id="resume"
         type="file"
-        accept=".pdf,.docx"
+        accept=".pdf"
         onChange={handleFileUpload}
         className="sr-only"
       />
