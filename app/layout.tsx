@@ -58,7 +58,6 @@ export default async function RootLayout({
                     Resume<span className="text-amber-500">Now</span>
                   </p>
                 </Link>
-
                 <SignedOut>
                   <div className="flex items-center gap-2">
                     <SignInButton>
